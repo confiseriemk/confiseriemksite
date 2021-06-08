@@ -1,4 +1,29 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
+
+export const Circle = styled.div`
+    width: 15px;
+    height: 15px;
+    border-radius: 7.5px;
+    background-color: #f00;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: absolute;
+    left: 1340px;
+    top: 40px;
+`
+
+export const Quantity= styled.h6`
+    cursor: pointer;
+    font-weight: 400; 
+    font-family: 'Montserrat';
+    @media(max-width: 800px){
+        font-size: 12px;
+    }
+    text-decoration: 'none';
+    color: #fff;
+    user-select: none;
+`
 
 export const Container = styled.div`
     grid-area: HD;

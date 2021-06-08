@@ -5,9 +5,11 @@
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.1.16",
     "axios": "^0.21.1",
+    "qrcode-pix": "3.0.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.6.0",
     "react-dom": "^16.13.1",
+    "react-floating-action-button": "^1.0.5",
     "react-hooks-helper": "^1.6.0",
     "react-icons": "^3.11.0",
     "react-redux": "^7.2.0",

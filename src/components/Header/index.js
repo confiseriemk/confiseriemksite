@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Icon, Container, Button, ButtonText, Tabs, Tab, Address} from './styles'
+import { Icon, Container, Button, ButtonText, Tabs, Tab, Address, Circle, Quantity} from './styles'
 import api from '../../services/api'
 import { VscAccount } from "react-icons/vsc";
 import { BiShoppingBag } from 'react-icons/bi';
@@ -9,6 +9,8 @@ import { IconContext } from "react-icons";
 export default function Header() {
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
+    const [quantity, setQuantity] = useState('')
+    const [executed, setE] = useState(false)
     async function searchData(id) {
         await api.get(`/profiles/${id}/?key=ac503125220aec9d0f3ddc4731a9565e`).then(r => {
             if(r.data === null || undefined) {
@@ -22,8 +24,26 @@ export default function Header() {
             }
         })
     }
-
-    searchData(localStorage.getItem('login'))
+    function execute(){
+        if(executed) {
+        } else {
+            searchData(localStorage.getItem('login'))
+            let counter = 0;
+            const cart = JSON.parse(localStorage.getItem('cart'))
+            if(cart === null) {
+                setQuantity(0)
+                setE(true)
+            } else {
+                for (const item of cart) {
+                    
+                    counter++;
+                }
+                setQuantity(counter)
+                setE(true)
+            }
+        }
+    }
+    execute();
     return (
             <Container>
                 <NavLink style={{textDecoration: 'none'}} to="/">
@@ -43,9 +63,12 @@ export default function Header() {
                     <VscAccount style={{ marginRight: 15 }} />
                     </IconContext.Provider>
                     </div>
+                    <NavLink style={{textDecoration: 'none', marginTop: 5}} to="/cart">
                     <IconContext.Provider value={{ color: "white", size: 30}}>
                     <BiShoppingBag style={{ marginRight: 15, marginBottom: 5, cursor: 'pointer' }} />
-                    </IconContext.Provider>     
+                    <Circle><Quantity>{quantity}</Quantity></Circle>
+                    </IconContext.Provider>
+                    </NavLink>   
             </Tabs>
             
             </div>
@@ -61,7 +84,13 @@ export default function Header() {
                 <Button>
                     <ButtonText>Entrar</ButtonText>
                 </Button>    
-            </Tab></NavLink>    
+            </Tab></NavLink>  
+            <NavLink style={{textDecoration: 'none', marginTop: 10}} to="/cart">
+                    <IconContext.Provider value={{ color: "white", size: 30}}>
+                    <BiShoppingBag style={{ marginRight: 15, marginBottom: 5, cursor: 'pointer' }} />
+                    <Circle><Quantity>{quantity}</Quantity></Circle>
+                    </IconContext.Provider>
+                    </NavLink>   
                 
             </div>}</div>
             </Container>

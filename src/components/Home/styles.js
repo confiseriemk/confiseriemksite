@@ -1,4 +1,44 @@
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
+
+export const GlobalStyle = createGlobalStyle`
+    h1 {
+        font-size: 2em;
+        font-weight: bolder;
+    }
+
+    h2 {
+        font-size: 1.5em;
+        font-weight: bolder;
+    }
+
+    h3 {
+	
+        font-size: 1.17em;
+        font-weight: bolder;
+    }
+
+    h4 {
+        font-size: 1em; 
+        font-weight: bolder;
+    }
+
+    h5 {
+        font-size: .83em;
+        font-weight: bolder;
+    }
+
+    h6 {
+        font-size: .67em;
+        font-weight: bolder;
+    }
+
+    .fab-container {
+    bottom: 5vh;
+    position: fixed;
+    margin: 1em;
+    right: 40vw;
+}
+`
 
 export const Container = styled.div`
     background-color: #f7f7f7;
@@ -16,14 +56,49 @@ export const Container = styled.div`
     transition: 400ms;
 `
 
+export const Button = styled.div`
+    margin-left: 10px;
+    width: 95%;
+    height: 50px;
+    border-style: solid;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 1px;
+    cursor: pointer;
+    transition: 100ms;
+    color: #181f2d;
+    @media(max-width: 800px){
+        width: 90px;
+        height: 30px;
+        margin-right: 16px;
+    }
+
+    &:hover {
+        color: #fff;
+        background-color: #181f2d;
+    }
+`
+
+export const ButtonText= styled.h5`
+    cursor: pointer;
+    font-weight: 400; 
+    font-family: 'Montserrat';
+    @media(max-width: 800px){
+        font-size: 12px;
+    }
+    text-decoration: 'none';
+`
+
 export const Banner = styled.div`
     display: flex;
     margin-top: 30px;
     width: 95%;
     height: 250px;
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.7);
-    background-blend-mode: overlay;
     align-items: center;
 `
 
@@ -153,6 +228,26 @@ export const FocusDescription = styled.h3`
     font-family: 'Montserrat';
     margin-left: 10px;
     color: #000;
+`
+
+export const AlertText = styled.h2`
+    font-weight: 400; 
+    font-family: 'Montserrat';
+    margin-left: 10px;
+    color: #fff;
+`
+
+export const Alert = styled.div`
+    background-color: #4BB543;
+    opacity: 0.9;
+    transition: opacity 1s linear;
+    display: flex;
+    flex-direction: row;
+    border-radius: 4px;
+    width: 300px;
+    height: 50px;
+    align-items: center;
+    justify-content: space-between;
 `
 
 

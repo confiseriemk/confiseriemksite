@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import api from '../../services/api'
 import { useHistory } from "react-router-dom";
-import { Input, Container,SubmitButton, Text, ButtonText, Sections, SidebySide, Forgotten } from './styles'
+import { GlobalStyle, Input, Container,SubmitButton, Text, ButtonText, Sections, SidebySide, Forgotten } from './styles'
 
 export default function Signup() {
     let history = useHistory();
@@ -11,7 +11,7 @@ export default function Signup() {
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
     const [phone, setPhone] = useState('')
-    const [response, setResponse] = useState('')
+    const [email, setEmail] = useState('')
     //Left Section
     const [cep, setCep] = useState('')
     const [address, setAddress] = useState('')
@@ -32,6 +32,10 @@ export default function Signup() {
         v=v.replace(/^([\d]{2})([\d]{3})([\d]{3})|^[\d]{2}.[\d]{3}-[\d]{3}/, '$1.$2-$3')
         return v;
     }
+    function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
     function buscaEndereco(cep){
         cep=cep.replace(/[^a-zA-Z0-9 ]/g, "");
         api.get(`/shipping/?cep=${cep}`).then(response => {
@@ -43,15 +47,16 @@ export default function Signup() {
         })
     }
     //Função que envia uma solicitação de criação de contas a API
-    function sendProfileCreate(name, phone, address) {
+    function sendProfileCreate(name, phone, address, email) {
         api.post("/profiles/?key=ac503125220aec9d0f3ddc4731a9565e", {
             "name": name,
             "phone": phone,
-            "adresses": address
-        }).then(response => setResponse(JSON.stringify(response)))
+            "adresses": address,
+            "email": email
+        })
     }
 
-    function createAccount(name, surname, number, cep, address, address2, district, city, state, phone) {
+    function createAccount(name, surname, number, cep, address, address2, district, city, state, phone, email) {
             sendProfileCreate(name + " " + surname, phone, [
                 {
                     "cep": cep,
@@ -62,11 +67,11 @@ export default function Signup() {
                     "state": state,
                     "address2": address2
                 }
-            ])
+            ], email)
     }
 
-    async function loginRequest(phone) {
-        await api.get(`/login/?phone=${phone}&key=ac503125220aec9d0f3ddc4731a9565e`).then(r => localStorage.setItem('login', r.data._id))
+    async function loginRequest(email) {
+        await api.get(`/login/?email=${email}&key=ac503125220aec9d0f3ddc4731a9565e`).then(r => localStorage.setItem('login', r.data._id))
         history.push("/")
         window.location.reload()
     }
@@ -74,7 +79,8 @@ export default function Signup() {
     
     return (
         <Sections>
-            <Container>{step == 1 ? 
+            <GlobalStyle />
+            <Container>{step === 1 ? 
             <div style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
             <Text>Seus dados:</Text>
             <SidebySide>
@@ -82,20 +88,24 @@ export default function Signup() {
                 <Input placeholder="Sobrenome" onChange={text => setSurname(text.target.value)}/>  
             </SidebySide>
             
-
+            <Input placeholder="Email" onChange={text => setEmail(text.target.value)}/>  
             <Input placeholder="Telefone para Contato" onChange={text => {
                 text.target.value = mascararTel(text.target.value)
                 setPhone(text.target.value)
                 }}/>
                 <Forgotten>{error}</Forgotten>
                 <SubmitButton onClick={() => {
-                    if(name == "" || surname == "" || phone == "") {
+                    if(name === "" || surname === "" || phone === "" || email === "") {
                         setError("Preencha todos os dados antes de prosseguir!")
                     } else {
                         const re = /\(\d{2,}\) \d{4,}\-\d{4}/
                         if(re.test(phone, re)) {
+                           if(validateEmail(email)) {
                             setError('')
                             setStep(2)
+                           } else {
+                               setError("Email Inválido")
+                           }
                         } else {
                             setError("Telefone Inválido")
                         }
@@ -125,9 +135,9 @@ export default function Signup() {
                     <Input placeholder="UF" value={state} onChange={text => setState(text.target.value)}/>
 
                     <SubmitButton onClick={() => {
-                        createAccount(name, surname, number, cep, address, address2, district, city, state, phone)
+                        createAccount(name, surname, number, cep, address, address2, district, city, state, phone, email)
                         setTimeout(function(){
-                            loginRequest(phone)
+                            loginRequest(email)
                         }, 3000);
                     }}>
                 <ButtonText>
